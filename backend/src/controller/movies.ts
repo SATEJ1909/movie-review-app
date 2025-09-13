@@ -29,7 +29,7 @@ export const getMovies = async (req, res) => {
 
 
 //@ts-ignore
-export const getMoviebyId = async (req, res) => {
+/* export const getMoviebyId = async (req, res) => {
     try {
         const movie = await MovieModel.findById(req.params.id).populate('reviews.userId');
 
@@ -43,7 +43,32 @@ export const getMoviebyId = async (req, res) => {
         console.log(error);
         return res.status(500).json({ message: error.message });
     }
-}
+} */
+
+    //@ts-ignore
+    export const getMoviebyId = async (req, res) => {
+        try {
+          const movie = await MovieModel.findById(req.params.id);
+      
+          if (!movie) {
+            return res.status(404).json({ message: "Movie not found" });
+          }
+      
+          // Fetch reviews for this movie and populate user info
+          const reviews = await ReviewModel.find({ movieId: movie._id })
+            .populate("userId", "username profilePicture");
+      
+          return res.status(200).json({
+            success: true,
+            message: "Movie found successfully",
+            movie,
+            reviews,
+          });
+        } catch (error : any) {
+          console.error(error);
+          return res.status(500).json({ message: error.message });
+        }
+      };
 
 
 

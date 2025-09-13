@@ -5,6 +5,7 @@ import UserModel from "../models/userModel.js";
 import WatchlistModel from "../models/watchlistModel.js";
 import zod from "zod";
 import { JWT_SECRET } from "../config.js";
+import mongoose from "mongoose";
 
 const RequiredSchema = zod.object({
     username: zod.string().min(3),
@@ -111,7 +112,7 @@ export const getWatchList = async (req: Request, res: Response) => {
     }
 }
 
-export const addtoWatchList = async(req: Request , res : Response) => {
+/* export const addtoWatchList = async(req: Request , res : Response) => {
     try {
         const watchList = new WatchlistModel({movieId :req.body.movieId , userId : req.userId});
         await watchList.save();
@@ -119,7 +120,35 @@ export const addtoWatchList = async(req: Request , res : Response) => {
     } catch (error: any) {
         return res.status(500).json({message : error.message});
     }
-}
+} */
+
+    export const addtoWatchList = async (req: Request, res: Response) => {
+        try {
+          const { movieId } = req.body;
+          const userId = (req as any).userId; // from isAuthorized middleware
+      
+          if (!movieId) {
+            return res.status(400).json({ success: false, message: "Movie ID required" });
+          }
+      
+          const alreadyInList = await WatchlistModel.findOne({ movieId, userId });
+          if (alreadyInList) {
+            return res.status(400).json({ success: false, message: "Already in watchlist" });
+          }
+      
+          const watchList = new WatchlistModel({
+            movieId: new mongoose.Types.ObjectId(movieId),
+            userId: new mongoose.Types.ObjectId(userId),
+          });
+      
+          await watchList.save();
+          return res.status(200).json({ success: true, message: "Movie added to watchlist successfully" });
+      
+        } catch (error: any) {
+          console.error("Watchlist Error:", error);
+          return res.status(500).json({ success: false, message: error.message });
+        }
+      };
 
 
 export const removeFromWatchList = async(req: Request , res : Response) => {
