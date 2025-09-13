@@ -1,0 +1,1 @@
+{"root":["./src/config.ts","./src/index.ts","./src/ovveride.d.ts","./src/controller/movies.ts","./src/controller/user.ts","./src/middleware/adminauth.ts","./src/middleware/auth.ts","./src/models/moviemodel.ts","./src/models/reviewmodel.ts","./src/models/usermodel.ts","./src/models/watchlistmodel.ts","./src/routes/movie.ts","./src/routes/user.ts"],"version":"5.9.2"}

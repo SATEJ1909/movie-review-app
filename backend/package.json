@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "kill-port 3000 && node dist/index.js"
+    "dev": "kill-port 3000 &&  tsc -b &&node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +19,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1",
     "zod": "^4.1.8"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0"
   }
 }
